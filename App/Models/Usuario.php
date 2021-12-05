@@ -10,6 +10,7 @@
         private $name;
         private $email;
         private $password;
+        private $idFollower;
 
         public function __get($attribute){
             return $this->$attribute;
@@ -78,4 +79,34 @@
             return $this;
         }
 
+        public function getAllUsers(){
+            $query = "SELECT UsuarioID, UsuarioNome from Usuario WHERE UsuarioNome LIKE :Pname";
+
+            $stmt = $this->db->prepare($query);
+
+            $stmt->bindValue(":Pname", "%" . $this->__get("name") . "%");
+            $stmt->execute();
+
+            $usuarios = $stmt->fetchAll(\PDO::FETCH_ASSOC);            
+
+            return $usuarios;
+        }
+
+        public function follow(){
+            $query = "INSERT INTO UsuSeguidores(UsuarioID, UsuarioIDSeguidor) VALUES(:PId, :PIdFollower)";
+
+            $stmt = $this->db->prepare($query);
+            $stmt->bindValue(":PId", $this->__get("id"));
+            $stmt->bindValue(":PIdFollower", $this->__get("idFollower"));
+            $stmt->execute();
+        }
+
+        public function unfollow(){
+            $query = "DELETE FROM UsuSeguidores WHERE UsuarioID = :Pid AND UsuarioIDSeguidor = :PidFollower";
+
+            $stmt = $this->db->prepare($query);
+            $stmt->bindValue(":Pid", $this->__get("id"));
+            $stmt->bindValue(":PidFollower", $this->__get("idFollower"));
+            $stmt->execute();
+        }
     }

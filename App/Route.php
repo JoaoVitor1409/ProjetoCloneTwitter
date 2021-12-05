@@ -43,16 +43,40 @@
                 'action' => 'timeline'
             );
 
-            $routes['timeline'] = array(
-                'route' => '/timeline',
-                'controller' => 'AppController',
-                'action' => 'timeline'
-            );
-
             $routes['tweet'] = array(
                 'route' => '/tweet',
                 'controller' => 'AppController',
                 'action' => 'tweet'
+            );
+
+            $routes['quemSeguir'] = array(
+                'route' => '/quemSeguir',
+                'controller' => 'AppController',
+                'action' => 'quemSeguir'
+            );
+
+            $routes['pesquisa'] = array(
+                'route' => '/pesquisa',
+                'controller' => 'AppController',
+                'action' => 'pesquisa'
+            );
+
+            $routes['deletar'] = array(
+                'route' => '/deletar',
+                'controller' => 'AppController',
+                'action' => 'deletar'
+            );
+
+            $routes['seguir'] = array(
+                'route' => '/seguir',
+                'controller' => 'AppController',
+                'action' => 'seguir'
+            );
+
+            $routes['deixarSeguir'] = array(
+                'route' => '/deixarSeguir',
+                'controller' => 'AppController',
+                'action' => 'deixarSeguir'
             );
 
             $this->setRoutes($routes);  

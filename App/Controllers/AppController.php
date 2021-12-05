@@ -13,6 +13,9 @@ Class AppController extends Action{
             $tweet = Container::getModel("Tweet");
             $tweet->__set("userId", $_SESSION['id']);
             $tweets = $tweet->getAll();
+            $this->view->qtdTweets = $tweet->qtdTweets();
+            $this->view->qtdFollows = $tweet->qtdFollows();
+            $this->view->qtdFollowers = $tweet->qtdFollowers();
 
             $this->view->tweets = $tweets;
             
@@ -28,6 +31,59 @@ Class AppController extends Action{
             $tweet->__set("userId", $_SESSION['id']);
 
             $tweet->save();
+
+            header("Location: /timeline");
+        }
+
+        public function quemSeguir(){
+            $this->validaAutenticacao();
+
+            $tweet = Container::getModel("Tweet");
+            $tweet->__set("userId", $_SESSION['id']);
+            $this->view->qtdTweets = $tweet->qtdTweets();
+            $this->view->qtdFollows = $tweet->qtdFollows();
+            $this->view->qtdFollowers = $tweet->qtdFollowers();
+
+            $this->render("quemSeguir");
+        }
+
+        public function pesquisa(){
+            session_start();
+            $user = Container::getModel("Usuario");
+            $user->__set("name", $_POST['name']);
+            $users[] = [
+                'logado' => $_SESSION['id']
+            ];
+            $users[] = $user->getAllUsers();
+
+            echo json_encode($users);
+        }
+
+        public function deletar(){
+            $tweet = Container::getModel("Tweet");
+            $tweet->__set("id", $_POST['id']);
+
+            $tweet->delete();
+            header("Location: /timeline");
+        }
+
+
+        public function seguir(){
+            session_start();
+            $user = Container::getModel("Usuario");
+            $user->__set("id", $_SESSION['id']);
+            $user->__set("idFollower", $_GET['id']);            
+            $user->follow();
+
+            header("Location: /timeline");
+        }
+
+        public function deixarSeguir(){
+            session_start();
+            $user = Container::getModel("Usuario");
+            $user->__set("id", $_SESSION['id']);
+            $user->__set("idFollower", $_GET['id']);
+            $user->unfollow();
 
             header("Location: /timeline");
         }

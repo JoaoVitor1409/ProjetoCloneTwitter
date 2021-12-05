@@ -7,17 +7,20 @@
     class IndexController extends Action{
 
         public function index(){
+            $this->validaAutenticacao();
             $this->view->login = isset($_GET['login']) ? $_GET['login'] : '';
             $this->render('index');            
         }
 
         public function inscreverse(){
+            $this->validaAutenticacao();
             $this->view->erroCampos = false; 
             $this->view->erroEmail = false; 
             $this->render('inscreverse');                     
         }
 
         public function registrar(){
+            $this->validaAutenticacao();
             
             $usuario = Container::getModel("Usuario");
 
@@ -39,5 +42,12 @@
                 $this->view->erroEmail = false;
                 $this->render('inscreverse');
             }            
-        }       
+        }
+        
+        public function validaAutenticacao(){
+            session_start();
+            if(isset($_SESSION['id'])){
+                header("Location: /timeline");
+            }
+        }
     }
